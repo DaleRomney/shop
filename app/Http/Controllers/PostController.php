@@ -8,20 +8,18 @@ use Illuminate\Session\Store;
 
 class PostController extends Controller
 {
-    public function getIndex(Store $session) {
-        $post = new Post();
-        $posts = $post->getPosts($session);
+    public function getIndex() {
+        $posts = Post::orderBy('created_at', 'asc')->paginate(2);
         return view('shop.index', ['posts' => $posts]);
     }
 
-    public function getAdminIndex(Store $session) {
-        $post = new Post();
-        $posts = $post->getPosts($session);
+    public function getAdminIndex() {
+        $posts = Post::orderBy('name', 'asc')->get();
         return view('admin.index', ['posts' => $posts]);
     }
 
     public function getPost($id) {
-        $post = Post::find($id);
+        $post = Post::where('id','=',$id)->first();
         return view('shop.post', ['post' => $post]);
     }
 
@@ -46,7 +44,6 @@ class PostController extends Controller
             'description' => $request->input('description')
         ]);
         $post->save();
-//      $post->addPost($session, $request->input('title'), $request->input('content'));
         return redirect()->route('admin.index')->with('info', 'Item created, name is: ' . $request->input('name'));
     }
 
@@ -54,18 +51,18 @@ class PostController extends Controller
         $this->validate($request, [
             'name' => 'required|min:5',
             'price' => 'required|min:3',
-            'description' =>'required|min:10'
+            'description' => 'required|min:10'
         ]);
         $post = Post::find($request->input('id'));
         $post->name = $request->input('name');
         $post->price = $request->input('price');
         $post->description = $request->input('description');
         $post->save();
-        return redirect()->route('admin.index')->with('info', 'Item edited, new Name is: ' . $request->input('Name'));
+        return redirect()->route('admin.index')->with('info', 'Item edited, new Name is: ' . $request->input('name'));
     }
 
     public function getAdminDelete($id){
-        $post = Post::find($id);;
+        $post = Post::find($id);
         $post->delete();
         return redirect()->route('admin.index')->with('info','Post Deleted');
     }

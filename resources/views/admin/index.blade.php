@@ -17,7 +17,7 @@
     @foreach($posts as $post)
     <div class="row">
         <div class="col-md-12">
-            <p><strong>{{ $post['name'] }}</strong>
+            <p><strong>{{ $post->name }}</strong>
                 <a href="{{ route('admin.edit', ['id' => $post->id]) }}">Edit</a></p>
                 <a href="{{ route('admin.delete', ['id' => $post->id]) }}">Delete</a></p>
         </div>
