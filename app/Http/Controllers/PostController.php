@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 
@@ -32,18 +33,19 @@ class PostController extends Controller
         return view('admin.edit', ['post' => $post, 'postId' => $id]);
     }
 
-    public function postAdminCreate(Store $session, Request $request) {
+    public function postAdminCreate( Request $request) {
         $this->validate($request, [
             'name' => 'required|min:5',
             'price' => 'required|min:3',
             'description' =>'required|min:10'
         ]);
+        $user = Auth::user();
         $post = new Post([
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'description' => $request->input('description')
         ]);
-        $post->save();
+        $user->post()->save($post);
         return redirect()->route('admin.index')->with('info', 'Item created, name is: ' . $request->input('name'));
     }
 

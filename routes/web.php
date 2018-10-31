@@ -57,3 +57,10 @@ Route::group(['prefix' => 'admin'], function() {
         'as' => 'admin.update'
     ]);
 });
+
+Auth::routes();
+
+Route::post('login', [
+    'uses' => 'SigninController@signin',
+    'as' => 'auth.signin'
+]);

@@ -7,6 +7,11 @@ class Post extends Model{
 
     protected $fillable = ['name','price','description'];
 
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
+
+
 //    public function getPosts($session) {
 //        if(!$session->has('posts')) {
 //            $this->createDummyData($session);
